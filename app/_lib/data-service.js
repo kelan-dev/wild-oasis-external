@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 export async function getCabin(id) {
   const { data, error } = await supabase
-    .from("cabin")
+    .from("wildoasis_cabin")
     .select("*")
     .eq("id", id)
     .single();
@@ -19,7 +19,7 @@ export async function getCabin(id) {
 
 export async function getCabinPrice(id) {
   const { data, error } = await supabase
-    .from("cabin")
+    .from("wildoasis_cabin")
     .select("regularPrice, discount")
     .eq("id", id)
     .single();
@@ -33,7 +33,7 @@ export async function getCabinPrice(id) {
 
 export const getCabins = async function () {
   const { data, error } = await supabase
-    .from("cabin")
+    .from("wildoasis_cabin")
     .select("id, name, maxCapacity, regularPrice, discount, image")
     .order("name");
 
@@ -47,7 +47,7 @@ export const getCabins = async function () {
 
 export async function getGuest(email) {
   const { data, error } = await supabase
-    .from("guest")
+    .from("wildoasis_guest")
     .select("*")
     .eq("email", email)
     .single();
@@ -57,7 +57,7 @@ export async function getGuest(email) {
 
 export async function getBooking(id) {
   const { data, error, count } = await supabase
-    .from("booking")
+    .from("wildoasis_booking")
     .select("*")
     .eq("id", id)
     .single();
@@ -72,7 +72,7 @@ export async function getBooking(id) {
 
 export async function getBookings(guestId) {
   const { data, error, count } = await supabase
-    .from("booking")
+    .from("wildoasis_booking")
     .select(
       "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabin(name, image)"
     )
@@ -93,7 +93,7 @@ export async function getBookedDatesByCabinId(cabinId) {
   today = today.toISOString();
 
   const { data, error } = await supabase
-    .from("booking")
+    .from("wildoasis_booking")
     .select("*")
     .eq("cabinId", cabinId)
     .or(`startDate.gte.${today},status.eq.checked-in`);
@@ -116,7 +116,10 @@ export async function getBookedDatesByCabinId(cabinId) {
 }
 
 export async function getSettings() {
-  const { data, error } = await supabase.from("settings").select("*").single();
+  const { data, error } = await supabase
+    .from("wildoasis_settings")
+    .select("*")
+    .single();
 
   if (error) {
     console.error(error);
@@ -139,7 +142,9 @@ export async function getCountries() {
 }
 
 export async function createGuest(newGuest) {
-  const { data, error } = await supabase.from("guest").insert([newGuest]);
+  const { data, error } = await supabase
+    .from("wildoasis_guest")
+    .insert([newGuest]);
 
   if (error) {
     console.error(error);

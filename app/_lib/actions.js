@@ -25,7 +25,7 @@ export async function updateGuest(formData) {
   };
 
   const { data, error } = await supabase
-    .from("guest")
+    .from("wildoasis_guest")
     .update(updateData)
     .eq("id", session.user.guestid);
 
@@ -48,7 +48,10 @@ export async function deleteBooking(bookingId) {
     throw new Error("You do not have permission to delete this reservation");
   }
 
-  const { error } = await supabase.from("booking").delete().eq("id", bookingId);
+  const { error } = await supabase
+    .from("wildoasis_booking")
+    .delete()
+    .eq("id", bookingId);
 
   if (error) {
     console.error(error);
@@ -74,7 +77,9 @@ export async function createBooking(bookingData, formData) {
     status: "unconfirmed",
   };
 
-  const { error } = await supabase.from("booking").insert([newBooking]);
+  const { error } = await supabase
+    .from("wildoasis_booking")
+    .insert([newBooking]);
 
   if (error) {
     console.error(error);
@@ -105,7 +110,7 @@ export async function updateBooking(formData) {
   };
 
   const { error } = await supabase
-    .from("booking")
+    .from("wildoasis_booking")
     .update(updateData)
     .eq("id", bookingId)
     .select()
